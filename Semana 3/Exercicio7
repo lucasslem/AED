@@ -16,10 +16,10 @@ void menu();
 void escolha();
 void incluir();
 //void apagar();
-//void buscar();
+void buscar();
 void listar();
 
-#define TAMVARIAVEIS (sizeof(int) * 3) // valores armazenados no inicio do pBuffer
+#define TAMVARIAVEIS (sizeof(int) * 3 + sizeof(char) * 10) // valores armazenados no inicio do pBuffer (int numPessoas; int i; int opcoes; char nome[10];)
 #define TAMNOME (sizeof(char) * 10)
 #define TAMIDADE (sizeof(int)) 
 #define TAMTELEFONE (sizeof(double))
@@ -57,7 +57,7 @@ void escolha() {
                 //apagar();
                 break;
             case 3: 
-                //buscar();
+                buscar();
                 break;
             case 4:
                 listar();
@@ -100,4 +100,22 @@ void listar() {
         printf("| Idade: %d\n", *(int *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->idade);
         printf("| Telefone: %.lf\n", *(double *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->telefone);
     }
+}
+
+void buscar() {
+    printf("Qual contato deseja encontrar? ");
+    scanf("%s", (char *)(pBuffer + sizeof(int) * 3));
+
+    for(*(int *)(pBuffer + sizeof(int)) = 0; *(int *)(pBuffer + sizeof(int)) < *(int *)pBuffer; *(int *)(pBuffer + sizeof(int)) = *(int *)(pBuffer + sizeof(int)) + 1) {
+        
+        if(strcmp((char *)(pBuffer + sizeof(int) * 3), (pessoas + (*(int *)(pBuffer + sizeof(int))))->nome) == 0) {
+            printf("\n-------------------------");
+            printf("\n   Contato encontrado!\n");
+            printf("-------------------------\n");
+            printf("\n| Nome: %s\n", (char *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->nome);
+            printf("| Idade: %d\n", *(int *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->idade);
+            printf("| Telefone: %.lf\n", *(double *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->telefone);            
+        }
+    }
+
 }
