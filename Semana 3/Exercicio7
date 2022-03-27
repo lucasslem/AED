@@ -1,0 +1,103 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char **nome;
+    int **idade;
+    double **telefone;
+} Pessoa;
+
+Pessoa pessoas[10];
+
+void *pBuffer = NULL;
+
+void menu();
+void escolha();
+void incluir();
+//void apagar();
+//void buscar();
+void listar();
+
+#define TAMVARIAVEIS (sizeof(int) * 3) // valores armazenados no inicio do pBuffer
+#define TAMNOME (sizeof(char) * 10)
+#define TAMIDADE (sizeof(int)) 
+#define TAMTELEFONE (sizeof(double))
+#define TAMPESSOA (TAMNOME + TAMIDADE + TAMTELEFONE) // tamanho de cada contato completo
+#define QUANTIDADE (*(int *)pBuffer) // contador de contatos
+
+int main() {
+    pBuffer = malloc(TAMVARIAVEIS);
+    *(int *)pBuffer = 0;
+    for(;;) {
+        menu();
+        escolha();
+    }
+
+    return 0;
+}
+
+void menu() {
+    printf("\n- 1) Incluir");
+    printf("\n- 2) Apagar");
+    printf("\n- 3) Buscar");
+    printf("\n- 4) Listar");
+    printf("\n- 5) Sair\n");
+}
+
+void escolha() {
+    printf("\nFuncionalidade desejada: ");
+    scanf("%d", (int *)(pBuffer + sizeof(int) * 2));
+
+    switch(*(int *)(pBuffer + sizeof(int) * 2)) {
+            case 1:
+                incluir();
+                break;
+            case 2:
+                //apagar();
+                break;
+            case 3: 
+                //buscar();
+                break;
+            case 4:
+                listar();
+                break;
+            case 5:
+                printf("\nPrograma encerrado.\n");
+                free(pBuffer);
+                exit(0);
+            default:
+                printf("Opcao invalida");
+                break;
+        }
+}
+
+void incluir() {
+    pBuffer = realloc(pBuffer, TAMVARIAVEIS + TAMPESSOA * ( (*(int *)pBuffer) + 1) );
+
+    printf("\nNome: ");
+    scanf("%s", (char *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer)));
+    printf("Idade: ");
+    scanf("%d", (int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME));
+    printf("Telefone: ");
+    scanf("%lf", (double *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME + TAMIDADE));
+ 
+    (pessoas + (*(int *)pBuffer))->nome = (pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer));
+    (pessoas + (*(int *)pBuffer))->idade = (pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME);
+    (pessoas + (*(int *)pBuffer))->telefone = (pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME + TAMIDADE);
+
+    *(int *)pBuffer = (*(int *)pBuffer) + 1;
+}
+
+void listar() {
+    printf("\n-------------------------");
+    printf("\n         AGENDA\n");
+    printf("-------------------------\n");
+
+    for(*(int *)(pBuffer + sizeof(int)) = 0; *(int *)(pBuffer + sizeof(int)) < *(int *)pBuffer; *(int *)(pBuffer + sizeof(int)) = *(int *)(pBuffer + sizeof(int)) + 1) {
+        
+        printf("\n| Nome: %s\n", (char *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->nome);
+        printf("| Idade: %d\n", *(int *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->idade);
+        printf("| Telefone: %.lf\n", *(double *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->telefone);
+    }
+}
