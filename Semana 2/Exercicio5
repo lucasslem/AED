@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char nome[30];
+    int idade;
+    int altura;
+} Pessoa;
+
+Pessoa *pessoas = NULL;
+
+void adicionar(int quantidade);
+void listar(int quantidade);
+
+int main() {
+    int escolha = 1, quantidade = 0;
+
+    printf("\nInforme os seguintes dados: ");
+    
+    do {
+        switch(escolha) {
+            
+            case 1:
+                adicionar(quantidade);
+                quantidade++;
+                break;
+            
+            case 2:
+                listar(quantidade);
+                free(pessoas);
+                printf("\nPrograma encerrado.");
+                exit(0);
+                break;
+            
+            default:
+                printf("\nFuncionalidade invalida.\n1. Sim\n2. Nao\n");
+                break;
+        }
+
+
+        printf("\nDeseja entrar com mais dados? \n1. Sim\n2. Nao\n");
+        scanf("%d", &escolha);
+
+    } while(escolha != 3);
+
+    return 0;
+}
+
+void adicionar(int quantidade) {
+
+    if(quantidade == 0) {
+        pessoas = (Pessoa *) malloc(sizeof(Pessoa));
+    }
+    else {
+        pessoas = (Pessoa *) realloc(pessoas, sizeof(Pessoa) * (quantidade + 1));
+    }
+    
+    printf("\nNome: ");
+    scanf("%s", pessoas[quantidade].nome);
+    printf("Idade: ");
+    scanf("%d", &pessoas[quantidade].idade);
+    printf("Altura: ");
+    scanf("%d", &pessoas[quantidade].altura);
+}
+
+void listar(int quantidade) {
+
+    printf("\n-------- DADOS --------\n\n");
+
+    for(int i = 0; i < quantidade; i++) {
+        printf("Nome: %s\n", pessoas[i].nome);
+        printf("Idade: %d\n", pessoas[i].idade);
+        printf("Altura: %d\n\n", pessoas[i].altura);
+    }
+}
