@@ -116,7 +116,7 @@ void apagar() {
                 *(double *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + TAMNOME + TAMIDADE) = 
                 *(double *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * ((*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + 1) + TAMNOME + TAMIDADE);
             }
-            printf("Contato removido.");
+            printf("Contato removido.\n");
             *(int *)pBuffer -= 1;
             pBuffer = (void *) realloc(pBuffer, TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer));
         }
