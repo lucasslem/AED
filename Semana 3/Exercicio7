@@ -19,7 +19,7 @@ void apagar();
 void buscar();
 void listar();
 
-#define TAMVARIAVEIS (sizeof(int) * 3) // valores armazenados no inicio do pBuffer (int numPessoas; int i; int opcoes;)
+#define TAMVARIAVEIS (sizeof(int) * 4) // valores armazenados no inicio do pBuffer (int numPessoas; int i; int opcoes; int compara)
 #define TAMNOME (sizeof(char) * 10)
 #define TAMIDADE (sizeof(int)) 
 #define TAMTELEFONE (sizeof(double))
@@ -90,6 +90,7 @@ void incluir() {
 
 void apagar() {
     pBuffer = (void *) realloc(pBuffer, TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME + sizeof(int));
+    *(int *)(pBuffer + sizeof(int) * 3) = 0;
 
     printf("Qual contato deseja apagar? ");
     scanf("%s", (char *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer)));
@@ -103,33 +104,53 @@ void apagar() {
             // j = (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME))
 
             for(*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME) = *(int *)(pBuffer + sizeof(int)); 
-            *(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME) < *(int *)pBuffer; 
-            *(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME) += 1) {
+                *(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME) < *(int *)pBuffer; 
+                *(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME) += 1) {
             
                 // novo nome
                 strcpy( (char *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME))), 
-                (char *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * ((*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + 1)));
+                    (char *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * ((*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + 1)));
+
+                (pessoas + (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)))->
+                    nome = (pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)));
+
                 // nova idade
                 *(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + TAMNOME) = 
-                *(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * ((*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + 1) + TAMNOME);
+                    *(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * ((*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + 1) + TAMNOME);
+
+                (pessoas + (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)))->
+                    idade = (pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + TAMNOME);
+
                 // novo telefone
                 *(double *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + TAMNOME + TAMIDADE) = 
-                *(double *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * ((*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + 1) + TAMNOME + TAMIDADE);
+                    *(double *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * ((*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + 1) + TAMNOME + TAMIDADE);
+
+                (pessoas + (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)))->
+                    telefone = (pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME)) + TAMNOME + TAMIDADE);
             }
+
+            *(int *)(pBuffer + sizeof(int) * 3) += 1; // contato existe
             printf("Contato removido.\n");
+
             *(int *)pBuffer -= 1;
-            pBuffer = (void *) realloc(pBuffer, TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer));
         }
     }
+
+    if(*(int *)(pBuffer + sizeof(int) * 3) == 0) {
+        printf("Contato inexistente.\n");
+    }
+
+    pBuffer = (void *) realloc(pBuffer, TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer));
 }
 
 void buscar() {
     pBuffer = (void *) realloc(pBuffer, TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer) + TAMNOME);
+    *(int *)(pBuffer + sizeof(int) * 3) = 0;
 
     printf("Qual contato deseja encontrar? ");
     scanf("%s", (char *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer)));
 
-    for(*(int *)(pBuffer + sizeof(int)) = 0; *(int *)(pBuffer + sizeof(int)) < *(int *)pBuffer; *(int *)(pBuffer + sizeof(int)) = *(int *)(pBuffer + sizeof(int)) + 1) {
+    for(*(int *)(pBuffer + sizeof(int)) = 0; *(int *)(pBuffer + sizeof(int)) < *(int *)pBuffer; *(int *)(pBuffer + sizeof(int)) += 1) {
         
         if(strcmp((char *)(pBuffer + TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer)), (char *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->nome) == 0) {
             printf("\n-------------------------");
@@ -137,8 +158,14 @@ void buscar() {
             printf("-------------------------\n");
             printf("\n| Nome: %s\n", (char *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->nome);
             printf("| Idade: %d\n", *(int *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->idade);
-            printf("| Telefone: %.lf\n", *(double *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->telefone);            
+            printf("| Telefone: %.lf\n", *(double *)(pessoas + (*(int *)(pBuffer + sizeof(int))))->telefone);
+
+            *(int *)(pBuffer + sizeof(int) * 3) += 1; // contato existe
         }
+    }
+
+    if(*(int *)(pBuffer + sizeof(int) * 3) == 0) {
+        printf("Contato inexistente.\n");
     }
 
     pBuffer = (void *) realloc(pBuffer, TAMVARIAVEIS + TAMPESSOA * (*(int *)pBuffer));
