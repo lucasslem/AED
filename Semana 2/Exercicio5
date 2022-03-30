@@ -68,8 +68,8 @@ void listar(int quantidade) {
     printf("\n-------- DADOS --------\n\n");
 
     for(int i = 0; i < quantidade; i++) {
-        printf("Nome: %s\n", pessoas[i].nome);
-        printf("Idade: %d\n", pessoas[i].idade);
-        printf("Altura: %d\n\n", pessoas[i].altura);
+        printf("| Nome: %s\n", pessoas[i].nome);
+        printf("| Idade: %d\n", pessoas[i].idade);
+        printf("| Altura: %d\n\n", pessoas[i].altura);
     }
 }
