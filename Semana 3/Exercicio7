@@ -28,6 +28,7 @@ void listar();
 int main() {
     pBuffer = (void *) malloc(TAMVARIAVEIS);
     *(int *)pBuffer = 0;
+    
     for(;;) {
         menu();
         escolha();
