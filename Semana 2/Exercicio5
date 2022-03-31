@@ -18,7 +18,7 @@ int main() {
 
     printf("\nInforme os seguintes dados: ");
     
-    do {
+    for(;;) {
         switch(escolha) {
             
             case 1:
@@ -28,8 +28,9 @@ int main() {
             
             case 2:
                 listar(quantidade);
-                free(pessoas);
+                
                 printf("\nPrograma encerrado.");
+                free(pessoas);
                 exit(0);
                 break;
             
@@ -41,7 +42,7 @@ int main() {
         printf("\nDeseja entrar com mais dados? \n1. Sim\n2. Nao\n");
         scanf("%d", &escolha);
 
-    } while(escolha != 2);
+    }
 
     return 0;
 }
