@@ -1,0 +1,211 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+typedef struct No {
+    int valor;
+    struct No *pEsq, *pDir;
+    int altura;
+} Nodo;
+
+void Escolha(Nodo *pRaiz);
+int QuantidadeNos();
+void PrimeiroCenario(Nodo *pRaiz, int quantNos);
+//void SegundoCenario();
+Nodo *NovoNo(int x);
+Nodo *Insere(Nodo *pRaiz, int x);
+int AlturaDoNo(Nodo *No);
+int Maior(int a, int b);
+int FB(Nodo *No);
+Nodo *Balanceamento(Nodo *pRaiz);
+Nodo *RSE(Nodo *pRaiz);
+Nodo *RSD(Nodo *pRaiz); 
+Nodo *RDE(Nodo *pRaiz);
+Nodo *RDD(Nodo *pRaiz);
+void Imprime(Nodo *pRaiz, int nivel);
+//int EhArvoreAvl(Nodo *pRaiz);
+
+
+int main() {
+    Nodo **pRaiz = NULL;
+
+    for(;;) {
+        Escolha(*pRaiz);
+    }
+
+    return 0;
+}
+
+void Escolha(Nodo *pRaiz) {
+    int opcao;
+
+    printf("1. Primeiro cenario\n2. Segundo cenario\n3. Sair\n\nEscolha uma opcao: ");
+    scanf("%d", &opcao);
+
+    switch(opcao) {
+        case 1:
+            PrimeiroCenario(pRaiz, QuantidadeNos());
+            break;
+        case 2:
+            //SegundoCenario();
+            break;
+        case 3:
+            printf("Programa encerrado.");
+            exit(0);
+        default:
+            printf("Opcao invalida.");
+    }
+}
+
+int QuantidadeNos() {
+    int quantNos = 0;
+
+    printf("Quantidade de nos da arvore: ");
+    scanf("%d", &quantNos);
+
+    return quantNos;
+}
+
+void PrimeiroCenario(Nodo *pRaiz, int quantNos) {
+    int x;
+
+    for(int i = 0; i < quantNos; i++) {
+        x = rand() % 100;
+        Insere(pRaiz, x); 
+    }
+
+    printf("---------- ARVORE FORMADA ----------");
+    Imprime(pRaiz, 1);
+
+    /*if(EhArvoreAvl) {
+        printf("Arvore AVL");
+    }
+    else {
+        printf("Arvore nao AVL");
+    }*/
+}
+
+Nodo *NovoNo(int x) {
+    Nodo *novo = (Nodo *) malloc(sizeof(Nodo));
+
+    novo->valor = x;
+    novo->pEsq = NULL;
+    novo->pDir = NULL;
+    novo->altura = 0;
+
+    return novo;
+}
+
+Nodo *Insere(Nodo *pRaiz, int x) {
+    if(pRaiz == NULL) {
+        return NovoNo(x);
+    }
+
+    if(x < pRaiz->valor) {
+        pRaiz->pEsq = Insere(pRaiz->pEsq, x);
+    }
+    else if(x > pRaiz->valor) {
+        pRaiz->pDir = Insere(pRaiz->pDir, x);
+    }
+    else {
+        printf("Elemento ja estava presente");
+    }
+
+    pRaiz->altura = Maior(AlturaDoNo(pRaiz->pEsq), AlturaDoNo(pRaiz->pDir)) + 1;
+    pRaiz = Balanceamento(pRaiz); 
+
+    return pRaiz;
+}
+
+int AlturaDoNo(Nodo *No) {
+    if(No == NULL) {
+        return -1;
+    }
+    else {
+        return No->altura;
+    }
+}
+
+int Maior(int a, int b) {
+    return (a > b)? a: b;
+}
+
+int FB(Nodo *No) {
+    if(No == NULL) {
+        return 0;
+    }
+    return (AlturaDoNo(No->pEsq) - AlturaDoNo(No->pDir));
+}
+
+int Balanceamento(Nodo *pRaiz) {
+    if(FB(pRaiz) < -1 && FB(pRaiz->pDir) <= 0) {
+        pRaiz = RSE(pRaiz);
+    }
+    else if(FB(pRaiz) < -1 && FB(pRaiz->pDir) > 0) {
+        pRaiz = RDD(pRaiz);
+    }
+    else if(FB(pRaiz) > 1 && FB(pRaiz->pEsq) >= 0) {
+        pRaiz = RSD(pRaiz);
+    }
+    else if(FB(pRaiz) > 1 && FB(pRaiz->pEsq) < 0) {
+        pRaiz = RDE(pRaiz);
+    }
+    
+}
+
+void RSE(Nodo **pRaiz) {
+    
+}
+
+void RSD(Nodo **pRaiz) {
+    
+}
+
+Nodo *RDE(Nodo *pRaiz) {
+
+}
+
+Nodo *RDD(Nodo *pRaiz) {
+
+}
+
+void Imprime(Nodo *pRaiz, int nivel) {
+    // Essa maneira de imprimir foi aprendida no video contido no seguinte link: https://www.youtube.com/watch?v=f9bNq6x7Osk
+
+    if(pRaiz) {
+        Imprime(pRaiz->pDir, nivel + 1);
+        printf("\n\n");
+
+        for(int i = 0; i < nivel; i++) {
+            printf("\t");
+        }
+
+        printf("%d", pRaiz->valor);
+        Imprime(pRaiz->pEsq, nivel + 1);
+    }
+}
+
+/*int EhArvoreAvl (Nodo *pRaiz) {
+    int fb;
+
+    if(pRaiz == NULL) {
+        return 1;
+    }
+
+    if(!EhArvoreAvl(pRaiz->pEsq)) {
+        return 0;
+    }
+
+    if(!EhArvoreavl(pRaiz->pDir)) {
+        return 0;
+    }
+
+    fb = FB(pRaiz);
+
+    if(fb > 1 || fb < -1) {
+        return 0;
+    }
+    else {
+        return 1;
+    }
+}*/
