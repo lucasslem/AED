@@ -317,7 +317,7 @@ void SegundoCenario() {
     Imprime(pRaiz, 1);
     pRaiz = Remove(pRaiz, 15);
     printf("\n\n\nAdicionando 8\n\n\n");
-    Insere(pRaiz, 8);
+    pRaiz = Insere(pRaiz, 8);
     Imprime(pRaiz, 1);
     LimparArvore(pRaiz);
     pRaiz = NULL;
