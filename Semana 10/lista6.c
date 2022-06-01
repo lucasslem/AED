@@ -54,9 +54,9 @@ void Escolha(int tam, int *vetorDesordenado, int *vetorOrdenado) {
             
             printf("\n\nVETOR ORDENADO:\n\n");
             ListarVetor(vetorOrdenado, tam);
-            Verificar(vetorOrdenado,tam);
+            Verificar(vetorOrdenado, tam);
             printf(" pelo Insertion Sort");
-            printf("\nTempo de execucao: %.5f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
+            printf("\nTempo de execucao: %.10f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
 
             free(vetorOrdenado);
             break;
@@ -72,9 +72,9 @@ void Escolha(int tam, int *vetorDesordenado, int *vetorOrdenado) {
             
             printf("\n\nVETOR ORDENADO:\n\n");
             ListarVetor(vetorOrdenado, tam);
-            Verificar(vetorOrdenado,tam);
+            Verificar(vetorOrdenado, tam);
             printf(" pelo Selection Sort");
-            printf("\nTempo de execucao: %.5f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
+            printf("\nTempo de execucao: %.10f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
 
             free(vetorOrdenado);
             break;
@@ -90,9 +90,9 @@ void Escolha(int tam, int *vetorDesordenado, int *vetorOrdenado) {
     
             printf("\n\nVETOR ORDENADO:\n\n");
             ListarVetor(vetorOrdenado, tam);
-            Verificar(vetorOrdenado,tam);
+            Verificar(vetorOrdenado, tam);
             printf(" pelo Quick Sort");
-            printf("\nTempo de execucao: %.5f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
+            printf("\nTempo de execucao: %.10f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
 
             free(vetorOrdenado);
             break;
@@ -108,9 +108,9 @@ void Escolha(int tam, int *vetorDesordenado, int *vetorOrdenado) {
             
             printf("\n\nVETOR ORDENADO:\n\n");
             ListarVetor(vetorOrdenado, tam);
-            Verificar(vetorOrdenado,tam);
+            Verificar(vetorOrdenado, tam);
             printf(" pelo Merge Sort");
-            printf("\nTempo de execucao: %.5f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
+            printf("\nTempo de execucao: %.10f", (end.tv_sec - begin.tv_sec) + (end.tv_usec - begin.tv_usec) * 1e-6);
             
             free(vetorOrdenado);
             break;
@@ -254,7 +254,7 @@ void Merge(int *data, int left, int meio, int right) {
                     temp[i] = data[p1];
                     p1++;
                 }
-                else{
+                else {
                     temp[i] = data[p2];
                     p2++;
                 }
